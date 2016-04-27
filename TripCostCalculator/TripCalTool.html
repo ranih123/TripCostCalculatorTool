@@ -1,0 +1,58 @@
+﻿<html>
+<head>
+    <title>Trip Calculator</title>
+</head>
+<body>
+ 
+    <div>
+        <h2>Enter Json String</h2>
+
+        INPUT:<textarea style="width:500px;height:200px" id="jsoninput" >
+            
+        </textarea>
+        <input type="button" id="servicetest" value="Service Test" onclick="GetResponse();"  />
+        <br />
+        <br />
+        <br />
+        RESULT:<textarea style="width:500px;height:200px" id="jsonoutput"></textarea>
+       
+    </div>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script type="text/javascript">
+
+
+        var uri = 'api/TripExpenseCalulator/';
+        function GetResponse() {
+            $('#servicetest').disabled = true;
+            var jsonData;
+            try {
+                jsonData = $.parseJSON($('#jsoninput').val());
+            }
+            catch (e) {
+                $('#jsonoutput').val('Please verify your Json Request!');
+                $('#servicetest').disabled = false;
+                return;
+            }
+
+            // submit POST
+            $.ajax({
+                url: uri,
+                cache: false,
+                type: 'POST',
+                data: jsonData,
+                datatype: "json",
+                success: function jsonOutput(data) {
+                    $('#jsonoutput').val(JSON.stringify(data));
+                },
+                error: function (err, ajaxOptions, thrownError) {
+                    $('#jsonoutput').val(err.responseText);
+                }
+            })
+
+            
+            $('#servicetest').disabled = false;
+        }
+    </script>
+</body>
+</html>  
